@@ -38,7 +38,8 @@ public class Main {
 
         // Array to keep track of the parent node for each cell to reconstruct the path
         Cell[][] parent = new Cell[map.getHeight()][map.getWidth()];
-        .
+
+
         while (!pq.isEmpty()) {
             Node current = pq.poll();
             Cell currentCell = map.getCell(current.x, current.y);
