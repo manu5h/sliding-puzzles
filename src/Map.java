@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Map {
     private int height;
@@ -28,10 +27,13 @@ public class Map {
 
     public void setCell(int row, int col, Cell cell) {
         cells[row][col] = cell;
-        if (cell.getType() == 'S') {
+        char type = cell.getType();
+        if (type == 'S') {
             start = cell;
-        } else if (cell.getType() == 'F') {
+            System.out.println("Start point (S) is at row: " + row + ", column: " + col);
+        } else if (type == 'F') {
             end = cell;
+            System.out.println("Finish point (F) is at row: " + row + ", column: " + col);
         }
     }
 
@@ -55,8 +57,13 @@ public class Map {
     }
 
     private boolean isValid(int row, int col) {
-        return row >= 0 && row < height && col >= 0 && col < width && cells[row][col].getType() != '0';
+        return row >= 0 && row < height && col >= 0 && col < width && cells[row][col] != null && cells[row][col].getType() != '0';
     }
+
+    public boolean isPassable(int row, int col) {
+        return row >= 0 && row < height && col >= 0 && col < width && cells[row][col] != null && cells[row][col].getType() != '0';
+    }
+
 
     @Override
     public String toString() {

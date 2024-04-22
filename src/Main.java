@@ -1,100 +1,110 @@
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        Map map = parseMap("E:\\Sliding Puzzle\\src\\map.txt");
-        System.out.println("Parsed Map:");
-        System.out.println(map);
+        Map map = MapParser.parseMap("D:\\Algorithms\\sliding-puzzles\\src\\map.txt"); // Change the file path accordingly
 
-        List<Cell> shortestPath = dijkstraShortestPath(map);
-        if (shortestPath != null) {
-            System.out.println("\nShortest Path:");
-            printShortestPath(shortestPath);
-        } else {
-            System.out.println("\nNo path found from start to finish!");
-        }
-    }
+        if (map != null) {
+            System.out.println("Parsed Map:");
+            System.out.println(map);
 
-    private static Map parseMap(String filename) {
-        try {
-            Scanner scanner = new Scanner(new File(filename));
-            int height = Integer.parseInt(scanner.nextLine());
-            int width = Integer.parseInt(scanner.nextLine());
-
-            Map map = new Map(height, width);
-
-            for (int row = 0; row < height; row++) {
-                String line = scanner.nextLine();
-                for (int col = 0; col < width; col++) {
-                    char type = line.charAt(col);
-                    map.setCell(row, col, new Cell(row, col, type));
-                }
+            List<Cell> shortestPath = findShortestPath(map);
+            if (shortestPath != null) {
+                System.out.println("\nShortest Path:");
+                printShortestPath(map.getStart(), shortestPath);
+            } else {
+                System.out.println("\nNo path found from start to finish!");
             }
-
-            scanner.close();
-            return map;
-        } catch (FileNotFoundException e) {
-            System.err.println("Error reading map file: " + filename + " (" + e.getMessage() + ")");
-            System.exit(1);
-        } catch (NumberFormatException e) {
-            System.err.println("Invalid map format: " + filename);
-            System.exit(1);
+        } else {
+            System.out.println("Failed to parse the map.");
         }
-        return null;
     }
 
-    private static List<Cell> dijkstraShortestPath(Map map) {
+    private static List<Cell> findShortestPath(Map map) {
         Cell start = map.getStart();
         Cell end = map.getEnd();
+        int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}; // Right, Left, Down, Up
 
-        // Initialize distances map with maximum values
-        java.util.Map<Cell, Integer> distances = new HashMap<>();
-        for (int row = 0; row < map.getHeight(); row++) {
-            for (int col = 0; col < map.getWidth(); col++) {
-                distances.put(map.getCell(row, col), Integer.MAX_VALUE);
-            }
+        // Priority queue to prioritize nodes with the shortest known distance
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        pq.offer(new Node(start.getRow(), start.getCol(), 0));
+
+        // Array to keep track of the shortest distance to each cell
+        int[][] distance = new int[map.getHeight()][map.getWidth()];
+        for (int[] row : distance) {
+            Arrays.fill(row, Integer.MAX_VALUE);
         }
-        distances.put(start, 0);
+        distance[start.getRow()][start.getCol()] = 0;
 
-        // Initialize priority queue for Dijkstra's algorithm
-        PriorityQueue<Cell> pq = new PriorityQueue<>(Comparator.comparingInt(distances::get));
-        pq.offer(start);
-
-        // Initialize previous node map
-        java.util.Map<Cell, Cell> prev = new HashMap<>();
+        // Array to keep track of the parent node for each cell to reconstruct the path
+        Cell[][] parent = new Cell[map.getHeight()][map.getWidth()];
 
         // Dijkstra's algorithm
         while (!pq.isEmpty()) {
-            Cell current = pq.poll();
-            if (current == end) break; // Reached the end point
+            Node current = pq.poll();
+            Cell currentCell = map.getCell(current.x, current.y);
 
-            // Explore neighbors
-            for (Cell neighbor : map.getNeighbors(current)) {
-                int altDistance = distances.get(current) + 1; // Assuming all edges have weight of 1
-                if (altDistance < distances.get(neighbor)) {
-                    distances.put(neighbor, altDistance);
-                    prev.put(neighbor, current);
-                    pq.offer(neighbor);
+            if (currentCell == end) {
+                break; // Reached the finish, stop the algorithm
+            }
+
+            for (int[] dir : directions) {
+                int nextX = current.x;
+                int nextY = current.y;
+                int steps = 0;
+
+                // Simulate sliding until hitting a wall or obstacle
+                while (map.isPassable(nextX + dir[0], nextY + dir[1])) {
+                    nextX += dir[0];
+                    nextY += dir[1];
+                    steps++;
+                }
+
+                // Calculate the total distance to reach the next cell
+                int nextDistance = current.distance + steps;
+                if (nextDistance < distance[nextX][nextY]) {
+                    distance[nextX][nextY] = nextDistance;
+                    parent[nextX][nextY] = currentCell;
+                    pq.offer(new Node(nextX, nextY, nextDistance));
                 }
             }
         }
 
-        // Reconstruct the shortest path
+        // Reconstruct the path from finish to start using the parent array
         List<Cell> shortestPath = new ArrayList<>();
         Cell current = end;
-        while (prev.containsKey(current)) {
-            shortestPath.add(current);
-            current = prev.get(current);
-        }
-        Collections.reverse(shortestPath);
 
+        while (current != null) {
+            shortestPath.add(current);
+            current = parent[current.getRow()][current.getCol()];
+        }
+
+        Collections.reverse(shortestPath);
         return shortestPath.isEmpty() ? null : shortestPath;
     }
 
-    private static void printShortestPath(List<Cell> path) {
-        int step = 1;
+    // Helper class to represent a node on the map with its coordinates and distance from the start
+    private static class Node implements Comparable<Node> {
+        int x;
+        int y;
+        int distance;
+
+        public Node(int x, int y, int distance) {
+            this.x = x;
+            this.y = y;
+            this.distance = distance;
+        }
+
+        @Override
+        public int compareTo(Node other) {
+            return Integer.compare(this.distance, other.distance);
+        }
+    }
+
+    // Helper method to print the shortest path
+    private static void printShortestPath(Cell start, List<Cell> path) {
+        System.out.println("1. Start at (" + (start.getCol() + 1) + "," + (start.getRow() + 1) + ")");
+        int step = 2;
         for (int i = 1; i < path.size(); i++) {
             Cell current = path.get(i);
             Cell previous = path.get(i - 1);
@@ -112,6 +122,7 @@ public class Main {
 
             System.out.println("to (" + (current.getCol() + 1) + "," + (current.getRow() + 1) + ")");
         }
+
         System.out.println(step + ". Done!");
     }
 }
