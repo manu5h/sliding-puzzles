@@ -38,11 +38,9 @@ public class MapParser {
                     map.setCell(row, col, new Cell(row, col, type));
                 }
             }
-
-            scanner.close();
             return map;
         } catch (FileNotFoundException e) {
-            System.err.println("Error reading map file: " + filename + " (" + e.getMessage() + ")");
+            System.err.println("Error reading Puzzle file: " + filename);
             System.exit(1);
         }
         return null;

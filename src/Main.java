@@ -2,8 +2,7 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        Map map = MapParser.parseMap("D:\\Algorithms\\sliding-puzzles\\src\\map.txt"); // Change the file path accordingly
-
+        Map map = MapParser.parseMap("Puzzle.txt");
         if (map != null) {
             System.out.println("Parsed Map:");
             System.out.println(map);
@@ -20,6 +19,7 @@ public class Main {
         }
     }
 
+    // Finding the shortest path using DIJKSTRA's Algorithm
     private static List<Cell> findShortestPath(Map map) {
         Cell start = map.getStart();
         Cell end = map.getEnd();
@@ -38,8 +38,7 @@ public class Main {
 
         // Array to keep track of the parent node for each cell to reconstruct the path
         Cell[][] parent = new Cell[map.getHeight()][map.getWidth()];
-
-        // Dijkstra's algorithm
+        .
         while (!pq.isEmpty()) {
             Node current = pq.poll();
             Cell currentCell = map.getCell(current.x, current.y);
@@ -83,7 +82,7 @@ public class Main {
         return shortestPath.isEmpty() ? null : shortestPath;
     }
 
-    // Helper class to represent a node on the map with its coordinates and distance from the start
+    // represent a node on the map with its coordinates and distance from the start
     private static class Node implements Comparable<Node> {
         int x;
         int y;
@@ -101,7 +100,7 @@ public class Main {
         }
     }
 
-    // Helper method to print the shortest path
+    //print the shortest path
     private static void printShortestPath(Cell start, List<Cell> path) {
         System.out.println("1. Start at (" + (start.getCol() + 1) + "," + (start.getRow() + 1) + ")");
         int step = 2;
