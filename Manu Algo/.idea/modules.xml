@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Manu Algo.iml" filepath="$PROJECT_DIR$/Manu Algo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sliding-puzzles.iml" filepath="$PROJECT_DIR$/sliding-puzzles.iml" />
     </modules>
   </component>
 </project>
