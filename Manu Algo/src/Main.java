@@ -4,7 +4,7 @@ import static java.lang.StringTemplate.STR;
 
 public class Main {
     public static void main(String[] args) {
-        Map map = MapParser.parseMap("sliding-puzzles/src/map.txt");
+        Map map = MapParser.parseMap("D:\\Algorithms\\sliding-puzzles\\Manu Algo\\src\\map.txt");
         if (map != null) {
             System.out.println("Parsed Map:");
             System.out.println(map);
