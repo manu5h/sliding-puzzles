@@ -35,7 +35,7 @@ public class MapParser {
                 String line = lines.get(row);
                 for (int col = 0; col < line.length(); col++) {
                     char type = line.charAt(col);
-                    map.setCell(row, col, new Cell(row, col, type).getType());
+                    map.setCell(row, col, type);
                 }
             }
             return map;

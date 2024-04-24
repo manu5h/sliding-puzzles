@@ -4,9 +4,6 @@ public class Main {
     public static void main(String[] args) {
         Map map = MapParser.parseMap("Puzzle.txt");
         if (map != null) {
-            System.out.println("Parsed Map:");
-            System.out.println(map);
-
             List<Position> shortestPath = findShortestPath(map);
             if (shortestPath != null) {
                 System.out.println("\nShortest Path:");
@@ -19,7 +16,7 @@ public class Main {
         }
     }
 
-    // Finding the shortest path using DIJKSTRA's Algorithm
+    // Finding the shortest path using BFS Algorithm
     public static List<Position> findShortestPath(Map map) {
         Queue<Position> queue = new LinkedList<>();
         boolean[][] visited = new boolean[map.getHeight()][map.getWidth()];
