@@ -1,7 +1,5 @@
 import java.util.*;
 
-import static java.lang.StringTemplate.STR;
-
 public class Main {
     public static void main(String[] args) {
         Map map = MapParser.parseMap("Puzzle.txt");
@@ -43,7 +41,7 @@ public class Main {
                 // Traverse backwards from the last position to the start position
                 while (lastPosition != null) {
                     path.addFirst(lastPosition); // Add the current position to the front of the list
-                    lastPosition = lastPosition.getPrevPosition(); // Move to the previous position
+                    lastPosition = lastPosition.getPreviousPosition(); // Move to the previous position
                 }
 
                 return path;
@@ -91,7 +89,7 @@ public class Main {
 
     //print the shortest path
     private static void printShortestPath(int startX, int startY, List<Position> path) {
-        System.out.println("1. Start at (" + (startX + 1) + "," + (startY + 1) + ")");
+        System.out.println("1. Start at (" + (startY + 1) + "," + (startX + 1) + ")");
         int step = 2;
 
         for (int i = 1; i < path.size(); i++) {
@@ -115,7 +113,7 @@ public class Main {
                 System.out.print("Move left ");
             }
 
-            System.out.println("to (" + (currentX + 1) + "," + (currentY + 1) + ")");
+            System.out.println("to (" + (currentY + 1) + "," + (currentX + 1) + ")");
         }
 
         System.out.println(step + ". Done!");

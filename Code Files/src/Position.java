@@ -1,13 +1,13 @@
 public class Position {
     private int x;
     private int y;
-    private final Position prevPosition;
+    private final Position previousPosition;
 
 
-    public Position(int x, int y, Position prevPosition) {
+    public Position(int x, int y, Position previousPosition) {
         this.x = x;
         this.y = y;
-        this.prevPosition = prevPosition;
+        this.previousPosition = previousPosition;
     }
 
     public int getX() {
@@ -18,15 +18,8 @@ public class Position {
         return y;
     }
 
-    public Position getPrevPosition() {
-        return prevPosition;
+    public Position getPreviousPosition() {
+        return previousPosition;
     }
 
-    public int getOneBasedX() {
-        return x + 1;
-    }
-
-    public int getOneBasedY() {
-        return y + 1;
-    }
 }

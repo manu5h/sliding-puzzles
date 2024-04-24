@@ -1,11 +1,10 @@
 public class Map {
-    private char[][] map; // 2D array to store the map layout
-    private int width;    // Width of the map
-    private int height;   // Height of the map
-    private int startX;   // X-coordinate of the start position
-    private int startY;   // Y-coordinate of the start position
-    private int finishX;  // X-coordinate of the finish position
-    private int finishY;  // Y-coordinate of the finish position
+    private char[][] map;
+    private int width;
+    private int height;
+    private int startX;
+    private int startY;
+
 
     // Constructor to initialize the map
     public Map(int width, int height) {
@@ -20,9 +19,6 @@ public class Map {
         if (content == 'S') {
             startX = x;
             startY = y;
-        } else if (content == 'F') {
-            finishX = x;
-            finishY = y;
         }
     }
 
